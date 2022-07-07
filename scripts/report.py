@@ -20,10 +20,10 @@ for account in accounts:
     positions.append({
         "symbol": act_position["symbol"],
         "qty": act_position["openQuantity"],
-        "cur": act_position["currentMarketValue"],
         "price": act_position["currentPrice"],
         "avg": act_position["averageEntryPrice"],
         "in": act_position["totalCost"],
+        "cur": act_position["currentMarketValue"],
     })
 
 df = pd.DataFrame(ar)
@@ -36,11 +36,13 @@ print(df)
 print()
 df2 = pd.DataFrame(positions)
 df2["profit"] = df2["cur"] - df2["in"]
-df2.loc["Totals"] = df2.sum(numeric_only=True)
-df2["cur"] = df2["cur"].apply(lambda x: "${:.2f}".format(x))
+cols = ["price", "avg"]
+diff_cols = df2.columns.difference(cols)
+df2.loc['Ttl/Avg'] = df2[diff_cols].sum(numeric_only=True).append(df2[cols].mean())
 df2["price"] = df2["price"].apply(lambda x: "${:.2f}".format(x))
 df2["avg"] = df2["avg"].apply(lambda x: "${:.2f}".format(x))
 df2["in"] = df2["in"].apply(lambda x: "${:.2f}".format(x))
+df2["cur"] = df2["cur"].apply(lambda x: "${:.2f}".format(x))
 df2["profit"] = df2["profit"].apply(lambda x: "${:.2f}".format(x))
 
 print("\nPositions\n")
