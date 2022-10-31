@@ -16,15 +16,15 @@ for account in accounts:
             info["balance"] = bal['marketValue']
             info["cash"] = bal['cash']
     ar.append(info)
-    act_position = account['positions'][0]
-    positions.append({
-        "symbol": act_position["symbol"],
-        "qty": act_position["openQuantity"],
-        "price": act_position["currentPrice"],
-        "avg": act_position["averageEntryPrice"],
-        "in": act_position["totalCost"],
-        "cur": act_position["currentMarketValue"],
-    })
+    for position in account['positions']:
+        positions.append({
+            "symbol": position["symbol"],
+            "qty": position["openQuantity"],
+            "price": position["currentPrice"],
+            "avg": position["averageEntryPrice"],
+            "in": position["totalCost"],
+            "cur": position["currentMarketValue"],
+        })
 
 df = pd.DataFrame(ar)
 df.loc["Totals"] = df.sum(numeric_only=True)
